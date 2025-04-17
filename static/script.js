@@ -12,22 +12,22 @@ document.getElementById("deployment_style").addEventListener("change", function 
   dedicatedFields.classList.add("hidden");
   submitSection.classList.add("hidden");
 
-  // Disable/enable form fields based on selection
-  const cloudInputs = cloudFields.querySelectorAll('input, select');
-  const dedicatedInputs = dedicatedFields.querySelectorAll('input, select');
+  // First enable all inputs to reset state
+  const allInputs = document.querySelectorAll('input, select');
+  allInputs.forEach(input => input.disabled = false);
 
   if (selectedStyle === "cloud") {
     cloudFields.classList.remove("hidden");
     submitSection.classList.remove("hidden");
-    // Enable cloud fields, disable dedicated fields
-    cloudInputs.forEach(input => input.disabled = false);
+    // Only disable dedicated fields
+    const dedicatedInputs = dedicatedFields.querySelectorAll('input, select');
     dedicatedInputs.forEach(input => input.disabled = true);
   } else if (selectedStyle === "dedicated") {
     dedicatedFields.classList.remove("hidden");
     submitSection.classList.remove("hidden");
-    // Enable dedicated fields, disable cloud fields
+    // Only disable cloud fields
+    const cloudInputs = cloudFields.querySelectorAll('input, select');
     cloudInputs.forEach(input => input.disabled = true);
-    dedicatedInputs.forEach(input => input.disabled = false);
   }
 });
   
