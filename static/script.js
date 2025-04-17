@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (ssoCloud) {
     ssoCloud.addEventListener("change", function () {
-      if (this.value === "Other") {
+    if (this.value === "Other") {
         ssoCloudOtherGroup.style.display = "block";
-      } else {
+    } else {
         ssoCloudOtherGroup.style.display = "none";
         document.getElementById("cloud_sso_vendor_other").value = "";
-      }
+    }
     });
-  }
+}
 });
 
 // Dedicated SSO vendor handling
@@ -55,14 +55,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (ssoDedicated) {
     ssoDedicated.addEventListener("change", function () {
-      if (this.value === "Other") {
+    if (this.value === "Other") {
         ssoDedicatedOtherGroup.style.display = "block";
-      } else {
+    } else {
         ssoDedicatedOtherGroup.style.display = "none";
         document.getElementById("dedicated_sso_vendor_other").value = "";
-      }
+    }
     });
-  }
+}
 });
 
 // Dedicated other environment handling
@@ -70,11 +70,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const otherEnvCheckbox = document.getElementById('dedicated-other-env-checkbox');
   const otherEnvInput = document.getElementById('dedicated-other-env-input');
 
-  if (otherEnvCheckbox && otherEnvInput) {
+if (otherEnvCheckbox && otherEnvInput) {
     otherEnvCheckbox.addEventListener('change', function () {
-      otherEnvInput.style.display = this.checked ? 'block' : 'none';
+    otherEnvInput.style.display = this.checked ? 'block' : 'none';
     });
-  }
+}
 });
 
 // Cloud environment fields handling
@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function () {
     envInput.setAttribute('min', '1');
     envInput.setAttribute('max', '6');
 
-    envInput.addEventListener('input', function () {
-      const num = parseInt(envInput.value);
-      container.innerHTML = ''; // Clear previous fields
+envInput.addEventListener('input', function () {
+    const num = parseInt(envInput.value);
+    container.innerHTML = ''; // Clear previous fields
 
       // Add validation
       if (isNaN(num) || num < 1 || num > 6) {
@@ -498,5 +498,44 @@ document.addEventListener('DOMContentLoaded', function() {
     if (event.target === modal) {
       modal.style.display = 'none';
     }
+});
+});
+
+// File upload handling
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInputs = document.querySelectorAll('input[type="file"]');
+  
+  fileInputs.forEach(input => {
+    const fileInfo = input.nextElementSibling;
+    
+    input.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        // Validate file type
+        const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+        if (!validTypes.includes(file.type)) {
+          fileInfo.textContent = 'Please upload a PNG or JPEG image';
+          fileInfo.classList.add('error');
+          this.value = ''; // Clear the input
+          return;
+        }
+        
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+          fileInfo.textContent = 'File size must be less than 5MB';
+          fileInfo.classList.add('error');
+          this.value = ''; // Clear the input
+          return;
+        }
+        
+        // Show success message
+        fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`;
+        fileInfo.classList.remove('error');
+      } else {
+        fileInfo.textContent = '';
+        fileInfo.classList.remove('error');
+      }
+    });
   });
 });

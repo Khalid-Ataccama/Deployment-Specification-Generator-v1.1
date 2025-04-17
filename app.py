@@ -200,7 +200,73 @@ class BasePDFGenerator:
         
     def draw_network_diagram(self):
         """Draw network diagram if provided - common for both types"""
-        pass  # We'll implement this later
+        if not self.has_network_diagram():
+            return
+            
+        # Get the uploaded file
+        file = request.files['network_diagram']
+        if not file or not file.filename:
+            return
+            
+        # Save the file temporarily
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        try:
+            # Switch to landscape orientation without creating a new page
+            self.canvas.setPageSize(landscape(letter))  # Switch to landscape
+            self.width, self.height = landscape(letter)  # Update dimensions for landscape
+            
+            # Draw the section heading
+            y = self.height - 50
+            y = self._draw_section_heading(y, "Network/Architecture")
+            
+            # Open the image to get its dimensions
+            with Image.open(filepath) as img:
+                img_width, img_height = img.size
+                
+                # Calculate scaling to fit the page
+                max_width = self.width - 100  # Leave margins
+                max_height = self.height - 150  # Leave more space for heading
+                
+                # Calculate scaling ratio
+                width_ratio = max_width / img_width
+                height_ratio = max_height / img_height
+                scale = min(width_ratio, height_ratio)
+                
+                # Calculate new dimensions
+                new_width = img_width * scale
+                new_height = img_height * scale
+                
+                # Calculate position to center the image
+                x = (self.width - new_width) / 2
+                y = (self.height - new_height - 100) / 2  # Adjust for heading
+                
+                # Draw the image
+                self.canvas.drawImage(
+                    filepath,
+                    x,
+                    y,
+                    width=new_width,
+                    height=new_height,
+                    preserveAspectRatio=True
+                )
+                
+                # Add page number and confidential mark
+                self._draw_page_footer(3)
+                self.canvas.showPage()
+                
+                # Reset back to portrait for any subsequent pages
+                self.canvas.setPageSize(letter)
+                self.width, self.height = letter
+                
+        except Exception as e:
+            print(f"Error drawing network diagram: {str(e)}")
+        finally:
+            # Clean up the temporary file
+            if os.path.exists(filepath):
+                os.remove(filepath)
         
     def get_customer_id(self):
         """Get customer identifier - to be implemented by child classes"""
@@ -262,6 +328,8 @@ class BasePDFGenerator:
             icon_path = os.path.join("static", "support_icon.png")
         elif title == "URLs":
             icon_path = os.path.join("static", "web_ui_icon.png")
+        elif title == "Network/Architecture":
+            icon_path = os.path.join("static", "network_diagram_icon.png")
             
         # Draw the icon if file exists and path is set
         if icon_path and os.path.exists(icon_path):
@@ -307,7 +375,7 @@ class BasePDFGenerator:
             )
         
         return y - 30
-        
+
     def _draw_key_values(self, y, kv_pairs, section=None, draw=True):
         """Helper to draw key-value pairs with specific formatting per section"""
         label_x = 250  # Right-align position for labels
