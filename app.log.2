@@ -1,0 +1,116 @@
+[2025-04-18 05:55:14,006] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/app.py", line 750, in index
+    return render_template('index.html', form=form)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/templates/index.html", line 32, in top-level template code
+    {% include 'cloud_fields.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/templates/cloud_fields.html", line 116, in top-level template code
+    {{ form.cloud_environments(class="form-control") }}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/utils.py", line 92, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'forms.DeploymentForm object' has no attribute 'cloud_environments'
+[2025-04-18 05:55:14,024] ERROR in app: Internal error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+[2025-04-18 05:55:18,161] INFO in app: Application startup
+[2025-04-18 05:55:20,212] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/app.py", line 750, in index
+    return render_template('index.html', form=form)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/templates/index.html", line 32, in top-level template code
+    {% include 'cloud_fields.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/templates/cloud_fields.html", line 128, in top-level template code
+    {{ form.cloud_urls(class="form-control") }}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/utils.py", line 92, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'forms.DeploymentForm object' has no attribute 'cloud_urls'
+[2025-04-18 05:55:20,251] ERROR in app: Internal error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+[2025-04-18 05:56:01,388] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/app.py", line 750, in index
+    return render_template('index.html', form=form)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/templates/index.html", line 32, in top-level template code
+    {% include 'cloud_fields.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/templates/cloud_fields.html", line 128, in top-level template code
+    {{ form.cloud_urls(class="form-control") }}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/khalid.khan/Documents/khalid_dev/flask_webapp/venv/lib/python3.12/site-packages/jinja2/utils.py", line 92, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'forms.DeploymentForm object' has no attribute 'cloud_urls'
+[2025-04-18 05:56:01,405] ERROR in app: Internal error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+[2025-04-18 05:56:06,824] INFO in app: Application startup

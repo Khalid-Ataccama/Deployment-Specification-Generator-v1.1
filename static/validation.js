@@ -1,12 +1,12 @@
-// Validation patterns
+// Define regular expression patterns for form validation
 const patterns = {
-    version: /^\d+\.\d+\.\d+$/,
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    regionId: /^[a-z]{2,4}\d{1,2}$/,
-    identifier: /^[a-z0-9-]+$/
+    version: /^\d+\.\d+\.\d+$/,  // Matches version numbers like 15.4.1
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,  // Basic email validation
+    regionId: /^[a-z]{2,4}\d{1,2}$/,  // Matches region IDs like 'use1' or 'usw2'
+    identifier: /^[a-z0-9-]+$/  // Matches lowercase letters, numbers, and hyphens
 };
 
-// Error messages
+// Define error messages for different validation scenarios
 const errorMessages = {
     required: "This field is required",
     version: "Version must be in format X.Y.Z (e.g., 15.4.1)",
@@ -15,15 +15,15 @@ const errorMessages = {
     identifier: "Only lowercase letters, numbers, and hyphens are allowed"
 };
 
-// Validation state
+// Store validation errors in a Map for tracking form state
 let formErrors = new Map();
 
-// Add error display
+// Function to display error message below an input field
 function showError(inputElement, message) {
-    // Remove any existing error message
+    // Remove any existing error message first
     removeError(inputElement);
     
-    // Create and insert error message
+    // Create and style error message element
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.textContent = message;
@@ -31,17 +31,18 @@ function showError(inputElement, message) {
     errorDiv.style.fontSize = '0.875rem';
     errorDiv.style.marginTop = '0.25rem';
     
+    // Add error message to DOM
     inputElement.parentNode.appendChild(errorDiv);
     inputElement.style.borderColor = '#dc3545';
     
-    // Store error
+    // Track error in the Map
     formErrors.set(inputElement.name, message);
     
-    // Update submit button state
+    // Update submit button state based on errors
     updateSubmitButton();
 }
 
-// Remove error display
+// Function to remove error message from an input field
 function removeError(inputElement) {
     const errorDiv = inputElement.parentNode.querySelector('.error-message');
     if (errorDiv) {
@@ -49,14 +50,14 @@ function removeError(inputElement) {
     }
     inputElement.style.borderColor = '';
     
-    // Remove error from storage
+    // Remove error from tracking Map
     formErrors.delete(inputElement.name);
     
     // Update submit button state
     updateSubmitButton();
 }
 
-// Update submit button state
+// Function to enable/disable submit button based on validation state
 function updateSubmitButton() {
     const submitButton = document.querySelector('button[type="submit"]');
     if (submitButton) {
@@ -64,9 +65,9 @@ function updateSubmitButton() {
     }
 }
 
-// Validate a single field
+// Main validation function for individual form fields
 function validateField(input) {
-    // Skip validation if field is not visible
+    // Skip validation for hidden fields
     if (input.offsetParent === null) {
         removeError(input);
         return true;
@@ -74,19 +75,19 @@ function validateField(input) {
 
     const value = input.value.trim();
     
-    // Required field validation
+    // Check required fields
     if (input.hasAttribute('required') && !value) {
         showError(input, errorMessages.required);
         return false;
     }
     
-    // Skip other validations if field is empty and not required
+    // Skip validation for empty optional fields
     if (!value) {
         removeError(input);
         return true;
     }
     
-    // Pattern validation based on field name or type
+    // Apply specific validation rules based on field name
     if (input.name.includes('version')) {
         if (!patterns.version.test(value)) {
             showError(input, errorMessages.version);
@@ -112,21 +113,21 @@ function validateField(input) {
         }
     }
     
-    // If we get here, validation passed
+    // If all validation passes, remove any existing errors
     removeError(input);
     return true;
 }
 
-// Initialize validation
+// Initialize form validation when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Add validation to all form inputs
+    // Add validation listeners to all form inputs
     document.querySelectorAll('input, select').forEach(input => {
-        // Validate on blur
+        // Validate when focus leaves the field
         input.addEventListener('blur', function() {
             validateField(this);
         });
         
-        // Validate on input change (for immediate feedback)
+        // Validate on input change if field already has an error
         input.addEventListener('input', function() {
             if (formErrors.has(this.name)) {
                 validateField(this);
@@ -134,11 +135,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Form submit validation
+    // Add form submit validation
     document.querySelector('form').addEventListener('submit', function(e) {
         let isValid = true;
         
-        // Validate all visible fields
+        // Validate all visible fields before submit
         this.querySelectorAll('input, select').forEach(input => {
             if (input.offsetParent !== null) { // Only validate visible fields
                 if (!validateField(input)) {
@@ -147,9 +148,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // Prevent form submission if validation fails
         if (!isValid) {
             e.preventDefault();
-            // Scroll to first error
+            // Scroll to first error for user visibility
             const firstError = document.querySelector('.error-message');
             if (firstError) {
                 firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });

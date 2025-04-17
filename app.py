@@ -1,3 +1,9 @@
+"""
+Flask web application for generating deployment specification PDFs.
+This application allows users to input deployment information and generates
+a professional PDF document with infrastructure details, contacts, and support information.
+"""
+
 from flask import Flask, render_template, request, send_file
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.pdfgen import canvas
@@ -16,7 +22,17 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 class BasePDFGenerator:
+    """
+    Base class for PDF generation with common functionality.
+    Handles basic PDF setup, title page creation, and common sections.
+    """
     def __init__(self, form_data):
+        """
+        Initialize PDF generator with form data.
+        
+        Args:
+            form_data (dict): Dictionary containing form submission data
+        """
         self.form_data = form_data
         self.today = datetime.today().strftime("%Y-%m-%d")
         self.customer_name = form_data.get("customer_name", "Unknown Customer")
@@ -29,11 +45,17 @@ class BasePDFGenerator:
         self.width, self.height = letter
         
     def _generate_filename(self):
-        """Generate PDF filename - to be implemented by child classes"""
+        """
+        Generate unique filename for the PDF.
+        To be implemented by child classes.
+        """
         raise NotImplementedError
         
     def generate(self):
-        """Main method to generate the complete PDF"""
+        """
+        Main method to generate the complete PDF document.
+        Orchestrates the creation of all sections in the correct order.
+        """
         self.draw_title_page()
         self.draw_infrastructure_and_info()
         if self.has_network_diagram():
@@ -42,7 +64,14 @@ class BasePDFGenerator:
         return self.filepath
         
     def draw_title_page(self):
-        """Draw the title page with logo and basic info"""
+        """
+        Creates the title page of the PDF with:
+        - Company logo
+        - Document title
+        - Customer name
+        - Compilation date
+        - Page number and confidentiality mark
+        """
         # Draw logo at the top center of the page
         logo_path = os.path.join("static", "ataccama_logo.png")
         print(f"Looking for logo at: {os.path.abspath(logo_path)}")  # Debug print
@@ -88,7 +117,13 @@ class BasePDFGenerator:
         self.canvas.showPage()
         
     def draw_infrastructure_and_info(self):
-        """Draw infrastructure, contacts, and support sections on one page"""
+        """
+        Draws the main content sections including:
+        - Infrastructure details
+        - Contact information
+        - Support resources
+        - Environment URLs
+        """
         y = self.height - 50
         
         # Get deployment style for prefix
@@ -195,11 +230,20 @@ class BasePDFGenerator:
             self.canvas.showPage()
         
     def draw_environments(self):
-        """Draw environments section - to be implemented by child classes"""
+        """
+        Draws environment-specific information.
+        To be implemented by child classes.
+        """
         raise NotImplementedError
         
     def draw_network_diagram(self):
-        """Draw network diagram if provided - common for both types"""
+        """
+        Handles the network diagram section:
+        - Processes uploaded diagram
+        - Switches to landscape orientation
+        - Scales and centers the diagram
+        - Adds appropriate labels and formatting
+        """
         if not self.has_network_diagram():
             return
             
@@ -661,6 +705,10 @@ class DedicatedPDFGenerator(BasePDFGenerator):
 
 @app.route("/", methods=["GET"])
 def index():
+    """
+    Main route handler for the web application.
+    Handles both GET (form display) and POST (form submission) requests.
+    """
     return render_template("index.html")
 
 @app.route("/generate_pdf", methods=["POST"])
