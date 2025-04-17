@@ -7,6 +7,8 @@ from werkzeug.utils import secure_filename
 import os
 from PIL import Image
 
+#testing git commit
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
