@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deployment Specification Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <h1>Deployment Specification Generator</h1>
+    <form method="post" action="/generate_pdf" enctype="multipart/form-data" id="main-form">
+      <!-- Deployment Style Dropdown -->
+      <div class="section">
+        <h2>Deployment</h2>
+        <div class="grid">
+          <div>
+            <label for="deployment_style">Deployment Type:</label>
+            <select id="deployment_style" name="deployment_style" required>
+              <option value="">-- Select --</option>
+              <option value="cloud">Ataccama Cloud</option>
+              <option value="dedicated">Ataccama Cloud - Dedicated</option>
+            </select>
+          </div>
+          <div>
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" id="customer_name" name="customer_name" required placeholder="Enter customer name">
+          </div>
+        </div>
+      </div>
+
+      <div id="cloud-fields" class="hidden">
+        {% include 'cloud_fields.html' %}
+      </div> 
+      <div id="dedicated-fields" class="hidden">
+        {% include 'dedicated_fields.html' %}
+      </div>
+
+      <!-- Submit Button -->
+      <div class="section hidden" id="submit-section">
+        <button type="button" id="preview-button">Preview URLs</button>
+        <button type="submit" id="submit-button">Generate PDF</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="preview-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>URL Preview</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="preview-content"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-preview">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='validation.js') }}"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<div class="section">
+    <h2>Infrastructure</h2>
+    <div class="grid">
+      <div>
+        <label>Cloud Vendor</label>
+        <select name="dedicated_cloud_vendor">
+          <option value="aws">AWS</option>
+          <option value="azure">Azure</option>
+        </select>
+      </div>
+      <div>
+        <label>User Connectivity Method</label>
+        <select name="dedicated_user_connectivity" required>
+          <option value="">-- Select --</option>
+          <option value="public">Public</option>
+          <option value="ip_allowlisting">IP Allowlisting</option>
+          <option value="privatelink">Privatelink</option>
+          <option value="vpn">VPN</option>
+        </select>
+      </div>
+      <div>
+        <label>Data Source Connectivity Method</label>
+        <select name="dedicated_data_source_connectivity" required>
+          <option value="">-- Select --</option>
+          <option value="public">Public</option>
+          <option value="hybrid_dpe">Hybrid DPE</option>
+          <option value="hybrid_dpe_with_privatelink">Hybrid DPE with Privatelink</option>
+          <option value="privatelink">Privatelink</option>
+          <option value="vpn">VPN</option>
+        </select>
+      </div>
+      <!-- SSO Vendor -->
+      <div class="form-group">
+        <label for="dedicated_sso_vendor">SSO Vendor</label>
+        <select id="dedicated_sso_vendor" name="dedicated_sso_vendor" required>
+          <option value="">-- Select --</option>
+          <option value="Azure AD">Azure AD</option>
+          <option value="OKTA">OKTA</option>
+          <option value="Other">Other (specify)</option>
+        </select>
+        
+        <!-- This input will appear when "Other" is selected -->
+        <div id="dedicated_sso_vendor_other_group" style="display: none; margin-top: 10px;">
+          <input
+            type="text"
+            id="dedicated_sso_vendor_other"
+            name="dedicated_sso_vendor_other"
+            placeholder="Enter SSO Vendor"
+            class="standard-input"      
+          />
+        </div>
+      </div>
+      
+      <div>
+        <label>Cloud Region</label>
+        <input type="text" name="dedicated_cloud_region" placeholder="e.g., us-east-1" required>
+      </div>
+      <div>
+        <label>Ataccama Version</label>
+        <input type="text" name="dedicated_ataccama_version" placeholder="e.g., 2024.1" required>
+      </div>
+      <div>
+        <label>Number of Environments</label>
+        <input type="number" name="dedicated_number_of_envs" placeholder="e.g., 4">
+      </div>
+      <div>
+        <label>Customer Identifier</label>
+        <input type="text" name="dedicated_customer_identifier" placeholder="e.g., acme">
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>Environments</h2>
+    <div class="checkboxes">
+      <label><input type="checkbox" name="dedicated_environments" value="dev"> Dev</label>
+      <label><input type="checkbox" name="dedicated_environments" value="test"> Test</label>
+      <label><input type="checkbox" name="dedicated_environments" value="preprod"> Preprod</label>
+      <label><input type="checkbox" name="dedicated_environments" value="prod"> Prod</label>
+      <label>
+        <input type="checkbox" id="dedicated-other-env-checkbox" name="dedicated_environments" value="other"> Other
+      </label>
+      <input type="text" id="dedicated-other-env-input" name="dedicated_other_environment" placeholder="e.g., dev-1" style="display: none; margin-top: 5px;">
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>URLs</h2>
+    <div class="checkboxes">
+      <label><input type="checkbox" name="dedicated_urls[]" value="one"> one</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="keycloak"> keycloak</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="minio_console"> minio console</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="mdm_ui"> mdm ui</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="mdm_server"> mdm server</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="rdm_ui"> rdm ui</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="rdm_server"> rdm server</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="portal"> portal</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="datastories"> datastories</label>
+      <label><input type="checkbox" name="dedicated_urls[]" value="dpm"> dpm</label>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>Contacts</h2>
+    <div class="grid">
+      <div>
+        <label>Customer Onboarding Manager</label>
+        <input type="text" name="dedicated_onboarding_manager" placeholder="john.doe@example.com">
+      </div>
+      <div>
+        <label>Customer Success Manager</label>
+        <input type="text" name="dedicated_success_manager" placeholder="john.doe@example.com">
+      </div>
+    </div>
+  </div>
+</div>  

@@ -1,0 +1,98 @@
+<div class="section">
+    <h2>Infrastructure</h2>
+    <div class="grid">
+      <div>
+        <label>Cloud Vendor</label>
+        <select name="cloud_vendor">
+          <option value="aws">AWS</option>
+          <option value="azure">Azure</option>
+        </select>
+      </div>
+      <div>
+        <label>User Connectivity Method</label>
+        <select name="cloud_user_connectivity">
+          <option value="">-- Select --</option>
+          <option value="public">Public</option>
+          <option value="ip_allowlisting">IP Allowlisting</option>
+        </select>
+      </div>
+      <div>
+        <label>Data Source Connectivity Method</label>
+        <select name="cloud_data_source_connectivity">
+          <option value="">-- Select --</option>
+          <option value="public">Public</option>
+          <option value="hybrid_dpe">Hybrid DPE</option>
+          <option value="hybrid_dpe_with_privatelink">Hybrid DPE with Privatelink</option>
+        </select>
+      </div>
+
+<!-- SSO Vendor -->
+<div class="form-group">
+    <label for="cloud_sso_vendor">SSO Vendor</label>
+    <select id="cloud_sso_vendor" name="cloud_sso_vendor">
+      <option value="">-- Select --</option>
+      <option value="Azure AD (Entra ID)">Azure AD (Entra ID)</option>
+      <option value="OKTA">OKTA</option>
+      <option value="Other">Other (specify)</option>
+    </select>
+  
+    <!-- This input will appear right under the dropdown if "Other" is selected -->
+    <div id="cloud_sso_vendor_other_group" style="display: none; margin-top: 10px;">
+      <input
+        type="text"
+        id="cloud_sso_vendor_other"
+        name="cloud_sso_vendor_other"
+        class="standard-input"
+        placeholder="Enter SSO Vendor"
+      />
+    </div>
+  </div>
+  
+  
+  
+      <div>
+        <label>Cloud Region</label>
+        <input type="text" name="cloud_region" placeholder="e.g., us-east-1">
+      </div>
+      <div>
+        <label>Ataccama Version</label>
+        <input type="text" name="cloud_ataccama_version" placeholder="e.g., 15.4.1">
+      </div>
+      <div>
+        <label>Upgrade Stream</label>
+        <select name="cloud_upgrade_stream">
+          <option>LTS</option>
+          <option>Latest</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Region Identifier</label>
+        <input type="text" name="cloud_region_identifier" placeholder="e.g., use1">
+      </div>
+
+
+      <div>
+        <label>Number of Environments</label>
+        <input type="number" name="cloud_number_of_envs" placeholder="e.g., 3">
+      </div>
+      <div id="cloud-environment-fields-container"></div>
+
+
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>Contacts</h2>
+    <div class="grid">
+      <div>
+        <label>Customer Onboarding Manager</label>
+        <input type="text" name="cloud_onboarding_manager" placeholder="john.doe@example.com">
+      </div>
+      <div>
+        <label>Customer Success Manager</label>
+        <input type="text" name="cloud_success_manager" placeholder="john.doe@example.com">
+      </div>
+    </div>
+  </div>
+  
