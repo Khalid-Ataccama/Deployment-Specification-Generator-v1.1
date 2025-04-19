@@ -1,3 +1,9 @@
+"""
+Flask web application for generating deployment specification PDFs.
+This application allows users to input deployment information and generates
+a professional PDF document with infrastructure details, contacts, and support information.
+"""
+
 from flask import Flask, render_template, request, send_file
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.pdfgen import canvas
@@ -16,7 +22,17 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 class BasePDFGenerator:
+    """
+    Base class for PDF generation with common functionality.
+    Handles basic PDF setup, title page creation, and common sections.
+    """
     def __init__(self, form_data):
+        """
+        Initialize PDF generator with form data.
+        
+        Args:
+            form_data (dict): Dictionary containing form submission data
+        """
         self.form_data = form_data
         self.today = datetime.today().strftime("%Y-%m-%d")
         self.customer_name = form_data.get("customer_name", "Unknown Customer")
@@ -29,11 +45,17 @@ class BasePDFGenerator:
         self.width, self.height = letter
         
     def _generate_filename(self):
-        """Generate PDF filename - to be implemented by child classes"""
+        """
+        Generate unique filename for the PDF.
+        To be implemented by child classes.
+        """
         raise NotImplementedError
         
     def generate(self):
-        """Main method to generate the complete PDF"""
+        """
+        Main method to generate the complete PDF document.
+        Orchestrates the creation of all sections in the correct order.
+        """
         self.draw_title_page()
         self.draw_infrastructure_and_info()
         if self.has_network_diagram():
@@ -42,7 +64,14 @@ class BasePDFGenerator:
         return self.filepath
         
     def draw_title_page(self):
-        """Draw the title page with logo and basic info"""
+        """
+        Creates the title page of the PDF with:
+        - Company logo
+        - Document title
+        - Customer name
+        - Compilation date
+        - Page number and confidentiality mark
+        """
         # Draw logo at the top center of the page
         logo_path = os.path.join("static", "ataccama_logo.png")
         print(f"Looking for logo at: {os.path.abspath(logo_path)}")  # Debug print
@@ -88,7 +117,13 @@ class BasePDFGenerator:
         self.canvas.showPage()
         
     def draw_infrastructure_and_info(self):
-        """Draw infrastructure, contacts, and support sections on one page"""
+        """
+        Draws the main content sections including:
+        - Infrastructure details
+        - Contact information
+        - Support resources
+        - Environment URLs
+        """
         y = self.height - 50
         
         # Get deployment style for prefix
@@ -195,12 +230,87 @@ class BasePDFGenerator:
             self.canvas.showPage()
         
     def draw_environments(self):
-        """Draw environments section - to be implemented by child classes"""
+        """
+        Draws environment-specific information.
+        To be implemented by child classes.
+        """
         raise NotImplementedError
         
     def draw_network_diagram(self):
-        """Draw network diagram if provided - common for both types"""
-        pass  # We'll implement this later
+        """
+        Handles the network diagram section:
+        - Processes uploaded diagram
+        - Switches to landscape orientation
+        - Scales and centers the diagram
+        - Adds appropriate labels and formatting
+        """
+        if not self.has_network_diagram():
+            return
+            
+        # Get the uploaded file
+        file = request.files['network_diagram']
+        if not file or not file.filename:
+            return
+            
+        # Save the file temporarily
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        try:
+            # Switch to landscape orientation without creating a new page
+            self.canvas.setPageSize(landscape(letter))  # Switch to landscape
+            self.width, self.height = landscape(letter)  # Update dimensions for landscape
+            
+            # Draw the section heading
+            y = self.height - 50
+            y = self._draw_section_heading(y, "Network/Architecture")
+            
+            # Open the image to get its dimensions
+            with Image.open(filepath) as img:
+                img_width, img_height = img.size
+                
+                # Calculate scaling to fit the page
+                max_width = self.width - 100  # Leave margins
+                max_height = self.height - 150  # Leave more space for heading
+                
+                # Calculate scaling ratio
+                width_ratio = max_width / img_width
+                height_ratio = max_height / img_height
+                scale = min(width_ratio, height_ratio)
+                
+                # Calculate new dimensions
+                new_width = img_width * scale
+                new_height = img_height * scale
+                
+                # Calculate position to center the image
+                x = (self.width - new_width) / 2
+                y = (self.height - new_height - 100) / 2  # Adjust for heading
+                
+                # Draw the image
+                self.canvas.drawImage(
+                    filepath,
+                    x,
+                    y,
+                    width=new_width,
+                    height=new_height,
+                    preserveAspectRatio=True
+                )
+                
+                # Add page number and confidential mark
+                self._draw_page_footer(3)
+                self.canvas.showPage()
+                
+                # Reset back to portrait for any subsequent pages
+                self.canvas.setPageSize(letter)
+                self.width, self.height = letter
+                
+        except Exception as e:
+            print(f"Error drawing network diagram: {str(e)}")
+        finally:
+            # Clean up the temporary file
+            if os.path.exists(filepath):
+                os.remove(filepath)
         
     def get_customer_id(self):
         """Get customer identifier - to be implemented by child classes"""
@@ -262,6 +372,8 @@ class BasePDFGenerator:
             icon_path = os.path.join("static", "support_icon.png")
         elif title == "URLs":
             icon_path = os.path.join("static", "web_ui_icon.png")
+        elif title == "Network/Architecture":
+            icon_path = os.path.join("static", "network_diagram_icon.png")
             
         # Draw the icon if file exists and path is set
         if icon_path and os.path.exists(icon_path):
@@ -307,7 +419,7 @@ class BasePDFGenerator:
             )
         
         return y - 30
-        
+
     def _draw_key_values(self, y, kv_pairs, section=None, draw=True):
         """Helper to draw key-value pairs with specific formatting per section"""
         label_x = 250  # Right-align position for labels
@@ -593,6 +705,10 @@ class DedicatedPDFGenerator(BasePDFGenerator):
 
 @app.route("/", methods=["GET"])
 def index():
+    """
+    Main route handler for the web application.
+    Handles both GET (form display) and POST (form submission) requests.
+    """
     return render_template("index.html")
 
 @app.route("/generate_pdf", methods=["POST"])
@@ -613,4 +729,4 @@ def generate_pdf():
     return send_file(filepath, as_attachment=True)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=10000)
