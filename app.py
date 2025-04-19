@@ -14,6 +14,7 @@ import os
 from PIL import Image
 
 #testing git commit againsss
+#making changes to this file to test git commit
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
